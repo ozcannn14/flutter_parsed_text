@@ -114,7 +114,6 @@ class ParsedText extends StatelessWidget {
         newString = newString.splitMapJoin(regExp,
             onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
       } else if (e.type == ParsedType.tagUser) {
-        print('TAG USER TYPE');
         RegExp regExp = RegExp(tagUserPattern);
         newString = newString.splitMapJoin(regExp,
             onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
