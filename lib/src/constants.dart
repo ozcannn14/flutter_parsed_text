@@ -4,9 +4,16 @@ part of flutter_parsed_text;
 const emailPattern = r"\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b";
 
 /// URL Regex - A predefined type for handling URL matching
-const urlPattern =
-    r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:_\+.~#?&//=]*)";
+//  default url pattern
+/* const urlPattern =
+    r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:_\+.~#?&//=]*)"; */
 
 /// Phone Regex - A predefined type for handling phone matching
 const phonePattern =
     r"(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})";
+
+//custom url pattern
+const urlPattern =
+    r"[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:.\+#=]{2,256}\.*\.(edu|com|net|org|io|gov|co|tk|de|info|uk|biz|me|be)\b([-a-zA-Z0-9@:\+.#?&//=]*)";
+
+const tagUserPattern = r"((?<=\s|^)@[A-Za-z0-9\_\-]+(?=\s|$))";

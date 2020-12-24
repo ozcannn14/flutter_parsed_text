@@ -36,10 +36,10 @@ class _MainAppState extends State<MainApp> {
             child: ParsedText(
               alignment: TextAlign.start,
               text:
-                  "[@michael:51515151] Hello london this is an example of the ParsedText, links like http://www.google.com or http://www.facebook.com are clickable and phone number 444-555-6666 can call too. But you can also do more with this package, for example Bob will change style and David too.\nAlso a US number example +1-(800)-831-1117. foo@gmail.com And the magic number is 42! #flutter #flutterdev",
+                  "[@michael:51515151] Hello london this is an example of the ParsedText, links like http://www.google.com or http://www.facebook.com are clickable and phone number 444-555-6666 can call too. But you can also do more with this package, for example Bob will change style and David too.\nAlso a US number example +1-(800)-831-1117. foo@gmail.com And the magic number is 42! #flutter #flutterdev @ozcan @oazdaj @ozcan2-test @ozcan4@ozcan3 @ozcan5",
               parse: <MatchText>[
-                MatchText(
-                    type: ParsedType.EMAIL,
+                /*  MatchText(
+                    type: ParsedType.email,
                     style: TextStyle(
                       color: Colors.red,
                       fontSize: 24,
@@ -48,7 +48,7 @@ class _MainAppState extends State<MainApp> {
                       launch("mailto:" + url);
                     }),
                 MatchText(
-                    type: ParsedType.URL,
+                    type: ParsedType.url,
                     style: TextStyle(
                       color: Colors.blue,
                       fontSize: 24,
@@ -61,7 +61,7 @@ class _MainAppState extends State<MainApp> {
                       }
                     }),
                 MatchText(
-                    type: ParsedType.PHONE,
+                    type: ParsedType.phone,
                     style: TextStyle(
                       color: Colors.purple,
                       fontSize: 24,
@@ -133,7 +133,24 @@ class _MainAppState extends State<MainApp> {
                       color: Colors.pink,
                       fontSize: 24,
                     ),
-                    onTap: (url) async {})
+                    onTap: (url) async {}), */
+                MatchText(
+                    type: ParsedType.tagUser,
+                    validator: (text) {
+                      String newText = text;
+                      if (text.startsWith('@')) {
+                        newText = newText.substring(1);
+                      }
+                      print(newText);
+                      return ['ozcan', 'ozcan2-test'].contains(newText);
+                    },
+                    style: TextStyle(
+                      color: Colors.deepOrange,
+                      fontSize: 24,
+                    ),
+                    onTap: (String nick) {
+                      print(nick);
+                    }),
               ],
               style: TextStyle(
                 fontSize: 24,

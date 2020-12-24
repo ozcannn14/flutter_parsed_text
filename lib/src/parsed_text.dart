@@ -93,24 +93,29 @@ class ParsedText extends StatelessWidget {
     // Parse the whole text and adds "%%%%" before and after the
     // each matched text this will be used to split the text affectively
     parse.forEach((e) {
-      if (e.type == ParsedType.EMAIL) {
-        RegExp regExp = RegExp(emailPattern, multiLine: true);
-        newString = newString.splitMapJoin(regExp,
-            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
-      } else if (e.type == ParsedType.PHONE) {
-        RegExp regExp = RegExp(phonePattern);
-        newString = newString.splitMapJoin(regExp,
-            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
-      } else if (e.type == ParsedType.URL) {
-        RegExp regExp = RegExp(urlPattern);
-        newString = newString.splitMapJoin(regExp,
-            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
-      } else if (e.type == ParsedType.CUSTOM) {
+      if (e.type == ParsedType.custom) {
         RegExp regExp = RegExp(e.pattern,
             multiLine: e.regexOptions.multiLine,
             caseSensitive: e.regexOptions.caseSensitive,
             unicode: e.regexOptions.unicode,
             dotAll: e.regexOptions.dotAll);
+        newString = newString.splitMapJoin(regExp,
+            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
+      } else if (e.type == ParsedType.email) {
+        RegExp regExp = RegExp(emailPattern, multiLine: true);
+        newString = newString.splitMapJoin(regExp,
+            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
+      } else if (e.type == ParsedType.phone) {
+        RegExp regExp = RegExp(phonePattern);
+        newString = newString.splitMapJoin(regExp,
+            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
+      } else if (e.type == ParsedType.url) {
+        RegExp regExp = RegExp(urlPattern);
+        newString = newString.splitMapJoin(regExp,
+            onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
+      } else if (e.type == ParsedType.tagUser) {
+        print('TAG USER TYPE');
+        RegExp regExp = RegExp(tagUserPattern);
         newString = newString.splitMapJoin(regExp,
             onMatch: (m) => "%%%%${m.group(0)}%%%%", onNonMatch: (m) => "$m");
       }
@@ -135,7 +140,7 @@ class ParsedText extends StatelessWidget {
             ? (TapGestureRecognizer()..onTap = () => e.onTap(value))
             : null;
 
-        if (e.type == ParsedType.CUSTOM) {
+        if (e.type == ParsedType.custom) {
           RegExp customRegExp = RegExp(e.pattern,
               multiLine: e.regexOptions.multiLine,
               caseSensitive: e.regexOptions.caseSensitive,
@@ -163,7 +168,7 @@ class ParsedText extends StatelessWidget {
             }
             break;
           }
-        } else if (e.type == ParsedType.EMAIL) {
+        } else if (e.type == ParsedType.email) {
           RegExp emailRegExp = RegExp(emailPattern);
 
           bool matched = emailRegExp.hasMatch(element);
@@ -176,7 +181,7 @@ class ParsedText extends StatelessWidget {
             );
             break;
           }
-        } else if (e.type == ParsedType.PHONE) {
+        } else if (e.type == ParsedType.phone) {
           RegExp phoneRegExp = RegExp(phonePattern);
 
           bool matched = phoneRegExp.hasMatch(element);
@@ -189,12 +194,41 @@ class ParsedText extends StatelessWidget {
             );
             break;
           }
-        } else if (e.type == ParsedType.URL) {
+        } else if (e.type == ParsedType.url) {
           RegExp urlRegExp = RegExp(urlPattern);
 
           bool matched = urlRegExp.hasMatch(element);
 
           if (matched) {
+            if (e.renderText != null) {
+              Map<String, String> result =
+                  e.renderText(str: element, pattern: e.pattern);
+
+              widget = TextSpan(
+                style: e.style != null ? e.style : style,
+                text: "${result['display']}",
+                recognizer: recognizer(result['value']),
+              );
+            } else {
+              widget = TextSpan(
+                style: e.style != null ? e.style : style,
+                text: "$element",
+                recognizer: recognizer(element),
+              );
+            }
+
+            break;
+          }
+        } else if (e.type == ParsedType.tagUser) {
+          RegExp tagUserRegExp = RegExp(tagUserPattern);
+
+          bool matched = tagUserRegExp.hasMatch(element);
+          bool isValidate = true;
+          if (e.validator != null) {
+            isValidate = e.validator(element);
+          }
+
+          if (matched && isValidate) {
             widget = TextSpan(
               style: e.style != null ? e.style : style,
               text: "$element",
