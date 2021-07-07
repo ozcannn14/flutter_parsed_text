@@ -16,15 +16,15 @@ class MatchText {
 
   /// If no [type] property is explicitly defined then this propery must be
   /// non null takes a [regex] string
-  String pattern;
+  String? pattern;
 
-  bool Function(String text) validator;
+  bool Function(String text)? validator;
 
   /// Takes a custom style of [TextStyle] for the matched text widget
-  TextStyle style;
+  TextStyle? style;
 
   /// A custom [Function] to handle onTap.
-  Function onTap;
+  Function? onTap;
 
   /// A callback function that takes two parameter String & pattern
   ///
@@ -35,7 +35,7 @@ class MatchText {
   /// and @michel the value to display on interface.
   /// Your pattern for ID & username extraction : `/\[(@[^:]+):([^\]]+)\]/`i
   /// Displayed text will be : Mention `@michel`
-  Function({String str, String pattern}) renderText;
+  Function({String? str, String? pattern})? renderText;
 
   final RegexOptions regexOptions;
 
